@@ -17,6 +17,8 @@ application-local.properties
 application-local.yml
 application-secret.properties
 application-secret.yml
+.env
+.env.*
 
 # IntelliJ IDEA
 .idea/
@@ -47,3 +49,5 @@ Thumbs.db
 # Test reports
 surefire-reports/
 jacoco.exec
+
+
