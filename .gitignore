@@ -10,7 +10,7 @@ target/
 *.ear
 
 # Maven Wrapper
-.mvn/wrapper/maven-wrapper.properties
+.mvn/wrapper/maven-wrapper.jar
 
 # Spring Boot secrets (DB passwords, API keys)
 application-local.properties
@@ -19,6 +19,7 @@ application-secret.properties
 application-secret.yml
 
 # IntelliJ IDEA
+.idea/
 .idea/workspace.xml
 .idea/dataSources.local.xml
 .idea/dataSources/
