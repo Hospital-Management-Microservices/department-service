@@ -139,6 +139,17 @@ public class DepartmentService {
         departmentDoctor.setIsHead(request.getIsHead() != null ? request.getIsHead() : false);
 
         DepartmentDoctor saved = departmentDoctorRepository.save(departmentDoctor);
+
+        // Sync: Update doctor's departmentId and departmentName in Doctor Service
+        try {
+            doctorResponse.setDepartmentId(departmentId);
+            doctorResponse.setDepartmentName(department.getName());
+            restTemplate.put(doctorServiceUrl + "/" + request.getDoctorId(), doctorResponse);
+        } catch (Exception e) {
+            // Log but don't fail — department_doctors record is already saved
+            System.err.println("Warning: Could not sync department info to Doctor Service: " + e.getMessage());
+        }
+
         return mapToDoctorDTO(saved);
     }
 
@@ -160,6 +171,19 @@ public class DepartmentService {
                 .orElseThrow(() -> new RuntimeException("Doctor not found in this department!"));
 
         departmentDoctorRepository.delete(departmentDoctor);
+
+        // Sync: Clear doctor's departmentId and departmentName in Doctor Service
+        try {
+            DoctorResponseDTO doctorResponse = restTemplate.getForObject(
+                    doctorServiceUrl + "/" + doctorId, DoctorResponseDTO.class);
+            if (doctorResponse != null) {
+                doctorResponse.setDepartmentId(null);
+                doctorResponse.setDepartmentName(null);
+                restTemplate.put(doctorServiceUrl + "/" + doctorId, doctorResponse);
+            }
+        } catch (Exception e) {
+            System.err.println("Warning: Could not clear department info in Doctor Service: " + e.getMessage());
+        }
     }
 
     // Set Head Doctor

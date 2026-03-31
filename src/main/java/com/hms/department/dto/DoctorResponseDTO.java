@@ -15,6 +15,10 @@ public class DoctorResponseDTO {
     private String email;
     private String phoneNumber;
     private Boolean isAvailable;
+    private String licenseNumber;
+    private Integer experienceYears;
+    private Long departmentId;
+    private String departmentName;
 
     public String getFullName() {
         return firstName + " " + lastName;
